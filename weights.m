@@ -1,0 +1,59 @@
+clear; clc; close all;
+
+m_ft = 3.2808399;   %meters to feet
+m_in = 39.3700787;  %meters to inches
+kg_lbs = 2.20462262;
+
+A_R = 20.4;
+S_w = 19.6 * m_ft^2;   %Wing area
+W_fw = 653.8 * kg_lbs;    %Weight of fuel in wing
+rho = 0.7422 * 1.225;
+U = 42.6;
+a = sqrt(1.4 * 287 * 0.9324 * 288.15);
+q = 0.5 * rho * U^2 * 0.020885;     %lb/ft^2
+lambda = 0.45;      %Taper ratio
+lambda_h = 1/5.6;
+lambda_v = 1;
+Lambda = 0;
+Lambda_ht = 0;
+Lambda_vt = 0;
+c = 0.98;       %Average chord of wing
+t = c*0.15;       %Average thickness of wing
+N_z = 3.8*1.5;     %Ultimate load factor (?)
+W_dg = 5500;    %Design gross weight
+S_ht = 0.29 * 5.4 * m_ft^2;    %Horizontal tail area
+S_vt = 0.29 * 0.5 * m_ft^2;    %Vertical tail area
+S_f = pi * 0.5^2 * m_ft^2;     %Fuselage wetted area
+L_t = 4.7 * m_ft;     %Tail length
+L = 10 * m_ft;       %Fuselage structural length
+D = 1 * m_ft;       %Fuselage structural depth
+N_l = 0.05;     %Ultimate landing load factor
+W_l = 5500;     %Landing design gross weight
+L_m = 1.5 * m_in;     %Length of main landing gear
+L_n = 1.5 * m_in;     %Nose gear length
+W_en = 138.5;   %Engine weight
+N_en = 1;   %Number of engines
+V_t = 31.5;     %Total fuel volume
+V_i = V_t;     %Integral tanks volume
+N_t = 3;     %Number of fuel tanks
+B_w = 20 * m_ft;    %Wing span
+W_uav = 1000;       %Uninstalled avionics wight, typically 800-1400lbs
+N_p = 2;        %Number of pilots
+M = U/a;
+
+W_wing = 0.036* S_w^0.758 * W_fw^0.0035 * (A_R / (cos(Lambda)^2))^0.6 * q^0.006 * lambda^0.04 * ((100*t)/(c*cos(Lambda)))^(-0.3) * (N_z * W_dg)^0.49
+W_horiztail = 0.016 * (N_z * W_dg)^0.414 * q^0.168 * S_ht^0.896 * ((100*t)/(c*cos(Lambda_ht)))^(-0.12) * (A_R / (cos(Lambda_ht)^2))^0.043 * lambda_h^(-0.02)
+W_verttail = 0.073 * (N_z * W_dg)^0.376 * q^0.122 * S_vt^0.873 * ((100*t)/(c*cos(Lambda_vt)))^(-0.49) * (A_R / (cos(Lambda_vt)^2))^0.357 * lambda_v^0.039
+W_fuselage = 0.052*S_f^1.086 * (N_z * W_dg)^0.177 * L_t^(-0.051) * (L/D)^(-0.072) * q^0.241 
+W_maingear = 0.095 * (N_l * W_l)^(0.768) * (L_m / 12)^0.409
+W_nosegear = 0.125 * (N_l * W_l)^0.566 * (L_n / 12)^0.845
+W_engine = 2.575 * W_en^0.922 * N_en
+W_fuelsys = 2.49 * V_t^0.726 * (1/(1 + V_i/V_t))^0.363 * N_t^0.242 * N_en^0.157
+W_controls = 0.053 * L^1.536 * B_w^0.371 * (N_z * W_dg * 10^(-4))^0.8
+W_hydraulics = 0.001 * W_dg
+W_avionics = 2.117 * W_uav ^ 0.933
+W_elec = 12.57 * (W_avionics) ^ 0.51
+
+W_empty = W_fuelsys + W_wing + W_horiztail + W_verttail + W_fuselage + W_maingear + W_nosegear + W_engine + W_controls + W_hydraulics + W_avionics + W_elec
+W_fuel = (W_dg - W_empty - 2*180 - 500) / 2.2
+V_t = W_fuel / 800 * m_ft^3;
