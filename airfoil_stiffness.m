@@ -5,11 +5,11 @@ np = 10001;
 n = 6;
 
 c_r = 1.85;
-c_t = 0.65 * c_r;
-c_av = (c_r+c_t)/2;
+c_t = 0.65 * c_r
+c_av = (c_r+c_t)/2
 s = 15;
-S = (c_r + c_t)*s;
-A_R = (4*s^2)/S;
+S = (c_r + c_t)*s
+A_R = (4*s^2)/S
 W = 5500/2.2*9.81;
 U = 42.6;
 C_L = 1.41;
@@ -19,7 +19,7 @@ rho_fuel = 800;
 rho_mat = 8000;
 
 thick_sec = 0.15;
-thick_mat = 0.015*thick_sec
+thick_mat = 0.015*thick_sec;
 m = 0.02;
 p = 0.4;
 
