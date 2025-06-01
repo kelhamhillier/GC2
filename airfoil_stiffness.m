@@ -11,7 +11,7 @@ s = 15;
 S = (c_r + c_t)*s;
 A_R = (4*s^2)/S;
 W = (5500/2.2)*9.81;
-U = 41;
+U = 36.6;
 C_L = 1.41;
 
 rho = 1.225*0.7422;
@@ -19,7 +19,7 @@ rho_fuel = 800;
 rho_mat = 2810;
 E = 71.7 * 10^9; 
 
-mass_fuel_total = 489;
+mass_fuel_total = 552.2;
 
 thick_sec = 0.15;
 thick_mat = 0.011*thick_sec;
@@ -123,11 +123,11 @@ disp([sum(A_c)*s/np  "volume per wing (m^3)"]);
 disp([sum(mass_frame)*s/np * 2 "frame mass of wings (kg)"])
 
 disp([sum(mass)*s/np * 2 "total mass of wings (kg)"])
-if n==1
-    plot(y, L./(0.5*rho*U^2*c));
-    xlabel("y")
-    ylabel("c_l")
-end
+
+%plot(y, L./(0.5*rho*U^2*c));
+%xlabel("y")
+%ylabel("c_l")
+
 %plot(y, dL);
 %hold on;
 %plot(y, dW);
