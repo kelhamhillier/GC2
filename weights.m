@@ -43,7 +43,7 @@ M = U/a;
 
 W_pilots = 180;
 
-wing_cg = 3.4;
+wing_cg = 3.3;
 horiz_cg = wing_cg + 6;
 vert_cg = horiz_cg;
 fuse_cg = 4.3;
