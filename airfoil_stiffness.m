@@ -11,7 +11,7 @@ s = 15;
 S = (c_r + c_t)*s;
 A_R = (4*s^2)/S;
 W = (5500/2.2)*9.81;
-U = 36.6;
+U = 36.6; %36.6
 C_L = 1.41;
 
 rho = 1.225*0.7422;
@@ -19,10 +19,10 @@ rho_fuel = 800;
 rho_mat = 2810;
 E = 71.7 * 10^9; 
 
-mass_fuel_total = 552.2;
+mass_fuel_total = 683;
 
 thick_sec = 0.15;
-thick_mat = 0.011*thick_sec;
+thick_mat = 0.005*thick_sec;
 m = 0.02;
 p = 0.4;
 
@@ -39,26 +39,27 @@ for i = 1:np
     end
 end
 
-A = sum(t)/(np);
-x_g_fuel = sum(x.*t)/((np)*A);
-y_g_fuel = sum(y_c.*t)/((np)*A);
+A_fuel = sum(t(1:np/2))/(np);
+A = sum(t)/np;
+x_g_fuel = sum(x(1:np).*t(1:np))/((np)*A);
+y_g_fuel = sum(y_c(1:np).*t(1:np))/((np)*A);
 
-A_metal = thick_mat*2;
+A_metal = thick_mat*2 + 1.65*10^(-3);
 x_g = sum(x.*thick_mat*2)/((np)*A_metal);
 y_g = sum(y_c.*thick_mat*2)/((np)*A_metal);
 
-I_xx = sum(((t/2)+(y_c-y_g)).^2 * thick_mat)/(np) + sum(((t/2)-(y_c-y_g)).^2 * thick_mat)/(np);
+I_xx = sum(((t/2)+(y_c-y_g)).^2 * thick_mat)/(np) + sum(((t/2)-(y_c-y_g)).^2 * thick_mat)/(np) + 4.73*10^(-6);
 
 mass_fuel = zeros(1,np);
 
 for j = 1:np
     A_c(j) = A*c(j)^2;  %Area of section
-    mass_frame(j) = thick_mat*c(j)*2*rho_mat;  %Mass per unit length
+    mass_frame(j) = A_metal*rho_mat*c(j)^2;  %Mass per unit length
 end
 
 for l = 1:np
     if sum(mass_fuel*s/np)<(mass_fuel_total/2)
-        mass_fuel(np-l+1) = A_c(np-l+1)*rho_fuel;
+        mass_fuel(np-l+1) = A*c(np-1+1)^2*rho_fuel;
     end
 end
 
@@ -128,6 +129,6 @@ disp([sum(mass)*s/np * 2 "total mass of wings (kg)"])
 %xlabel("y")
 %ylabel("c_l")
 
-%plot(y, dL);
-%hold on;
-%plot(y, dW);
+plot(y, dL);
+hold on;
+plot(y, dW);
